@@ -1,21 +1,21 @@
-// Versión corregida - Configuración directa sin .env
+/* global process */
 const { Sequelize } = require('sequelize');
+require('dotenv').config();
 
-// Configuración directa de la base de datos (reemplaza con tus datos)
 const sequelize = new Sequelize(
-  'GestionDeContratos',  // Nombre de la BD
-  'postgres',            // Usuario
-  'pg',                  // Contraseña
+  process.env.DB_NAME,
+  process.env.DB_USER,
+  process.env.DB_PASSWORD,
   {
-    host: 'localhost',    // Host
-    port: 5432,           // Puerto de PostgreSQL
-    dialect: 'postgres',  // ¡Dialecto explícito en minúsculas!
-    logging: false,       // Desactiva logs de SQL (opcional)
+    host: process.env.DB_HOST,
+    port: process.env.DB_PORT,
+    dialect: process.env.DB_DIALECT,
+    logging: false,
     pool: {
-      max: 5,
-      min: 0,
-      acquire: 30000,
-      idle: 10000
+      max: parseInt(process.env.SEQUELIZE_POOL_MAX),
+      min: parseInt(process.env.SEQUELIZE_POOL_MIN),
+      acquire: parseInt(process.env.SEQUELIZE_POOL_ACQUIRE),
+      idle: parseInt(process.env.SEQUELIZE_POOL_IDLE)
     }
   }
 );
