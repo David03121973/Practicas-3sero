@@ -1,7 +1,5 @@
-// models/usuario.js
 const { DataTypes } = require("sequelize");
 const sequelize = require("../helpers/database.js");
-const Resenna = require("./resenna.js");
 
 const Usuario = sequelize.define("usuario", {
   id_usuario: {
@@ -9,29 +7,41 @@ const Usuario = sequelize.define("usuario", {
     autoIncrement: true,
     primaryKey: true,
   },
+  nombre: {
+    type: DataTypes.STRING,
+    allowNull: false,
+  },
   nombre_usuario: {
     type: DataTypes.STRING,
     allowNull: false,
     unique: true,
   },
-  email: {
+  cargo: {
     type: DataTypes.STRING,
     allowNull: false,
-    validate: {
-      isEmail: true,
-    },
   },
   contrasenna: {
     type: DataTypes.STRING,
     allowNull: false,
   },
+  rol: {
+    type: DataTypes.STRING,
+    allowNull: false,
+  },
+  activo: {
+    type: DataTypes.BOOLEAN,
+    allowNull: false,
+    defaultValue: true,
+  },
 }, {
   timestamps: true,
-  paranoid: true,
 });
 
-// Definir la relación
-Usuario.hasMany(Resenna, { foreignKey: 'id_usuario' }); // Un usuario puede tener muchas reseñas
-Resenna.belongsTo(Usuario, { foreignKey: 'id_usuario' }); // Una reseña pertenece a un usuario
+Usuario.associate = function(models) {
+  Usuario.hasMany(models.Oferta, {
+    foreignKey: 'id_usuario',
+    onDelete: 'CASCADE',
+  });
+};
 
 module.exports = Usuario;
